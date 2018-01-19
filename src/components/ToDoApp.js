@@ -1,59 +1,53 @@
 import React from 'react';
 import List from './List'
 import Input from './Input'
+import { Button, Icon, Row, Col} from 'antd';
+import '../css/index.css'
 
 class ToDoApp extends React.Component {
   onInputChange = (event) => {
-    this.setState({newToDo: event.target.value});
+    this.props.inputChange(event.target.value);
   }
 
   onInputSubmit = (event) => {
     event.preventDefault();
-    this.setState((previousState) => ({
-      list: [...previousState.list, {item: previousState.newToDo, done: false}],
-      newToDo: ''
-    }))
-  }
-
-  onListItemClick = (i) => {
-    this.setState((previousState) => ({
-      list: [
-        ...previousState.list.slice(0, i),
-        Object.assign({}, previousState.list[i], {done: !previousState.list[i].done}),
-        ...previousState.list.slice(i+1)
-      ]
-    }))
-  }
-
-  deleteListItem = (i) => {
-    this.setState((previousState) => ({
-      list: [
-        ...previousState.list.slice(0, i),
-        ...previousState.list.slice(i+1)
-      ]
-    }))
+    this.props.inputSubmit();
   };
 
-  componentWillMount() {
-    this.setState({
-      list: [],
-      newToDo: 'test'
-    })
+  toggleTodo = (i) => {
+    this.props.toggleTodo(i)
+  };
+
+  deleteListItem = (i) => {
+    this.props.deleteListItem(i)
   };
 
   render() {
+    console.log(this.props)
     return(
-      <div className="row">
-        <div className="col-md-10 col-md-offset-1">
-          <div className="panel panel-default">
-            <div className="panel-body">
-              <h1>Todo App</h1>
-              <hr/>
-              <List listItems={this.state.list} onClick={this.onListItemClick} deleteListItem={this.deleteListItem} />
-              <Input value={this.state.newToDo} onSubmit={this.onInputSubmit} onChange={this.onInputChange} />
-            </div>
-          </div>
+      <div>
+        <div className="well">
+          <h1>Todo App</h1>
+          <hr/>
+          <List
+            data={this.props.toDoApp.list}
+            toggleTodo={this.toggleTodo}
+            deleteListItem={this.deleteListItem}
+          />
+          <Input
+            value={this.props.toDoApp.newToDo}
+            onSubmit={this.onInputSubmit}
+            onChange={this.onInputChange}
+          />
         </div>
+        <Row>
+          <Col span={14}>
+          </Col>
+          <Col span={10}>
+            <Button className="pull-left"><Icon type="user" />   <a href="">Ethan Yu</a></Button>
+            <Button className="pull-right"><Icon type="github" />   <a href="">yoogoo</a></Button>
+          </Col>
+        </Row>
       </div>
     );
   }

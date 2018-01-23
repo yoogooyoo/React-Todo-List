@@ -1,22 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import ToDoAppContainer from './containers/toDoAppContainer';
-import configureStore from './redux/configureStore';
+import App from './components/App';
+import reducer from './reducers';
 
-const store = configureStore();
+const store = createStore(reducer);
 
-class App extends React.Component {
-  render(){
-    return(
-      <Provider store={store}>
-        <ToDoAppContainer />
-      </Provider>
-    );
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById('app'));
+render(
+  <Provider store={store}>
+    <App />
+  </Provider> ,
+  document.getElementById('app')
+)
 
 if(module.hot)
   module.hot.accept();
